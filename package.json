@@ -1,0 +1,57 @@
+{
+  "name": "deltacosmetic",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.1147.0",
+    "bcrypt": "^5.0.1",
+    "cookie-session": "^2.0.0",
+    "cors": "^2.8.5",
+    "cron": "^1.8.2",
+    "dotenv": "^16.0.0",
+    "express": "^4.17.2",
+    "express-session": "^1.17.2",
+    "input": "^1.0.1",
+    "jsonwebtoken": "^8.5.1",
+    "moment": "^2.29.2",
+    "mongoose": "^6.2.10",
+    "mongoose-auto-increment-reworked": "^1.2.1",
+    "mongoose-long": "^0.5.1",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-cache": "^5.1.2",
+    "node-ipinfo": "^3.1.0",
+    "nodemailer": "^6.7.5",
+    "numeral": "^2.0.6",
+    "rand-token": "^1.0.1",
+    "react-router": "^6.4.1",
+    "react-router-dom": "^6.4.1",
+    "socket.io": "^4.7.2",
+    "uuid": "^9.0.0",
+    "zustand": "^4.1.1"
+  },
+  "nodemonConfig": {
+    "ignore": [
+      "test/*",
+      "docs/*"
+    ],
+    "delay": 1500
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
+  },
+  "optionalDependencies": {
+    "bufferutil": "^4.0.6",
+    "utf-8-validate": "^5.0.9"
+  },
+  "engines": {
+    "node": "v16.14.2"
+  }
+}
