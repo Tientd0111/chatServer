@@ -5,7 +5,9 @@ const AutoIncrement = require('mongoose-auto-increment-reworked').MongooseAutoIn
 let UserSchema = new mongoose.Schema({
 	username: {min: 6, type: String, required: true, max: 50, lowercase: true,  unique: true},
 	name: {type: String, required: true, max: 100},
+	nickname: {type: String, default: "", max: 100},
 	avatar: {type: String, default: ""},
+	cover: {type: String, default: ""},
 	password: {type: String, max: 255, default: ''},
 	email: {type: String, max: 100, index: true, unique:true, sparse:true},
 	phone_number: {type: String, required: true, max: 20, lowercase: true, unique: [true, 'Số điện thoại đã tồn tại!']},
