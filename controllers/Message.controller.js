@@ -1,4 +1,7 @@
+const ConversationModel = require("../models/Conversation.model");
+const MessageModel = require("../models/Message.model");
 const Message = require("../models/Message.model");
+const UserModel = require("../models/User.model");
 
 exports.createMessage = async (data) => {
 	if(!!data) {
@@ -18,21 +21,24 @@ exports.createMessage = async (data) => {
 };
 
 exports.getMessageByConversation = async (req, res) => {
+    const data = req.params
     if(!!data){
-        const list_1 = await Conversation.find({user_1: data.id}) 
-        const list_2 = await Conversation.find({user_2: data.id}) 
-        const list = list_1.concat(list_2)
-        const listConversation = await Promise.all(list.map(async (x) => {
-            const user_1 = await UserModel.findById({_id: x.user_1})
-            const user_2 = await UserModel.findById({_id: x.user_2})
-            const message = await MessageModel.find({conversation_id: x._id})
-            return {
-                _id: x._id,
-                user_1: user_1,
-                user_2: user_2,
-                message: message[message.length - 1]
-            }
-        }))
-        return res.send({conversation: listConversation})
+        try{
+            const list = await MessageModel.find({conversation_id: data.id})
+            const message = await MessageModel.find({conversation_id: data.id})
+            const listMessage = await Promise.all(message.map(async (x) => {
+                const sender = await UserModel.findById({_id: x.sender})
+                // const message = await MessageModel.find({conversation_id: x.conversation_id})
+                return {
+                    _id: x._id,
+                    conversation_id: data.id,
+                    sender: sender,
+                    content: x.content
+                }
+            }))
+            return res.send({message: listMessage})
+        }catch (e){
+            console.log(e);
+        }
     }
 }

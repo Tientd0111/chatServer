@@ -1,6 +1,7 @@
 const express = require("express");
 const auth = require("./routes/Auth.route");
 const conversation = require("./routes/Conversation.route");
+const message = require("./routes/Message.route");
 const port = process.env.PORT || 8080;
 // Setting & Connect to the Database
 let configDB = require("./config/database");
@@ -50,6 +51,7 @@ app.use(
 
 app.use("/api/v1/auth", auth);
 app.use("/api/v1/conversation", conversation);
+app.use("/api/v1/message", message);
 
 httpServer.listen(port, () => {
   console.log("Http sv listen in ", port);
