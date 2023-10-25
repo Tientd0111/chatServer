@@ -1,6 +1,7 @@
 const Conversation = require("../models/Conversation.model");
 const MessageModel = require("../models/Message.model");
 const UserModel = require("../models/User.model");
+const { resConversation } = require("../utils/resultObj");
 
 exports.createConversation = async (req, res) => {
 	const data = req.body
@@ -59,7 +60,7 @@ exports.getConversationById = async (req, res) => {
                 }
             }) 
             
-            return res.send({conversation: conversation})
+            return res.send({conversation: resConversation(conversation)})
         }catch (e){
             console.log(e);
         }

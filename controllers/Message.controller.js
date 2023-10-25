@@ -2,6 +2,7 @@ const ConversationModel = require("../models/Conversation.model");
 const MessageModel = require("../models/Message.model");
 const Message = require("../models/Message.model");
 const UserModel = require("../models/User.model");
+const { resUser } = require("../utils/resultObj");
 
 exports.createMessage = async (data) => {
 	if(!!data) {
@@ -32,7 +33,7 @@ exports.getMessageByConversation = async (req, res) => {
                 return {
                     _id: x._id,
                     conversation_id: data.id,
-                    sender: sender,
+                    sender: resUser(sender),
                     content: x.content
                 }
             }))
