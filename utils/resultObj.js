@@ -8,15 +8,15 @@ exports.resConversation = (conversation) => {
 
 exports.resUser = (user) => {
     return {
-		_id: user._id,
-        username: user.username,
-        nickname: user.nickname,
-        avatar: user.avatar,
-        cover: user.cover,
-        date_of_birth: user.date_of_birth,
-        email: user.email,
-        phone: user.phone,
-        is_block: user.is_block,
-        is_online: user.is_online,
+		  _id: user._id,
+      username: user.username,
+      nickname: user.nickname,
+      avatar: user.avatar,
+      cover: user.cover,
+      date_of_birth: user.date_of_birth,
+      email: user.email,
+      phone: user.phone,
+      is_block: user.is_block,
+      is_online: user.is_online,
 	}
 }

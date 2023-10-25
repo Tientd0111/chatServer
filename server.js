@@ -18,7 +18,11 @@ const mongoose = require("mongoose");
 const { Server } = require("socket.io");
 const messageController = require("./controllers/Message.controller");
 const authController = require("./controllers/Auth.controller");
-const io = new Server(httpServer);
+const io = new Server(httpServer,{
+  cors: {
+    origin: "*"
+  }
+});
 
 mongoose
   .connect(configDB.url, configDB.config)
@@ -65,8 +69,12 @@ io.on("connection", (socket) => {
   socket.on("send-message", async (msg) => {
 	const res = await messageController.createMessage(msg)
 	if(res) {
-		console.log(res);
-		return socket.emit("return-message", msg)
+		const dataChat = {
+      sender: {_id:msg.sender},
+      content: msg.content,
+      conversation_id: msg.conversation_id
+   }
+		return io.emit("return-message", dataChat)
 	}
     // io.emit("chat message", msg);
   });

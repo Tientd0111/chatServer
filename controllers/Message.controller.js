@@ -8,7 +8,7 @@ exports.createMessage = async (data) => {
 	if(!!data) {
 		try {
 			const message = new Message({
-				conversation_id: data.conversation,
+				conversation_id: data.conversation_id,
                 sender: data.sender,
                 content: data.content
 			});
@@ -25,7 +25,6 @@ exports.getMessageByConversation = async (req, res) => {
     const data = req.params
     if(!!data){
         try{
-            const list = await MessageModel.find({conversation_id: data.id})
             const message = await MessageModel.find({conversation_id: data.id})
             const listMessage = await Promise.all(message.map(async (x) => {
                 const sender = await UserModel.findById({_id: x.sender})
@@ -38,6 +37,9 @@ exports.getMessageByConversation = async (req, res) => {
                 }
             }))
             return res.send({message: listMessage})
+            console.log('====================================');
+            console.log(listMessage);
+            console.log('====================================');
         }catch (e){
             console.log(e);
         }
