@@ -9,6 +9,8 @@ const morgan = require("morgan");
 const { createServer } = require("http");
 const cors = require("cors");
 const session = require("cookie-session");
+const jwtVariable = require('./constant/jwt');
+const authMethod = require('./services/auth.service');
 // initialize our express app
 const app = express();
 app.use(express.static(__dirname + "/public"));
@@ -18,6 +20,7 @@ const mongoose = require("mongoose");
 const { Server } = require("socket.io");
 const messageController = require("./controllers/Message.controller");
 const authController = require("./controllers/Auth.controller");
+const UserModel = require("./models/User.model");
 const io = new Server(httpServer,{
   cors: {
     origin: "*"
@@ -61,21 +64,56 @@ httpServer.listen(port, () => {
   console.log("Http sv listen in ", port);
 });
 
-io.on("connection", (socket) => {
-  const res = authController.updateOnline({token:socket.handshake.query.token,status: true})
-  socket.on("disconnect", (socket) => {
-    console.log("user disconnected",socket);
+io.of('/room')
+io.on("connection",async (socket) => {
+
+  let listUser = []
+  // const res = authController.updateOnline({token:socket.handshake.query.token,status: true})
+  const accessTokenSecret =
+		process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
+	const accessTokenLife =
+		process.env.ACCESS_TOKEN_LIFE || jwtVariable.accessTokenLife;
+
+	const decoded = await authMethod.decodeToken(
+		socket?.handshake?.query?.token,
+		accessTokenSecret,
+		accessTokenLife
+	);
+  if(decoded){
+    await UserModel.findOneAndUpdate({_id: decoded.payload._id},{$set: {is_online: true}},{new: true})
+    // listUser.push({_id: decoded.payload._id})
+    // //user online status
+    // return socket.broadcast.emit('getOnlineUser',listUser)
+  }
+
+  
+
+  socket.on("disconnect", async () => {
+    console.log("user disconnected");
+    if(decoded){
+      await UserModel.findOneAndUpdate({_id: decoded.payload._id},{$set: {is_online: false}}, {new: true})
+      // const index = await listUser.findIndex(item => item._id === decoded.payload._id);
+      // if (index > -1) {
+      //   listUser.splice(index, 1);
+      // }
+      // console.log(listUser);
+      // //user offline status
+      // return socket.broadcast.emit('getOnlineUser',listUser)
+    }
+    
   });
+
+  socket.on('join', (conversation_id)=>{
+    socket.join(conversation_id);
+  });
+
   socket.on("send-message", async (msg) => {
-	const res = await messageController.createMessage(msg)
-	if(res) {
-		const dataChat = {
+    await messageController.createMessage(msg)
+    const dataChat = {
       sender: {_id:msg.sender},
       content: msg.content,
       conversation_id: msg.conversation_id
-   }
-		return io.emit("return-message", dataChat)
-	}
-    // io.emit("chat message", msg);
+    }
+		return io.to(msg.conversation_id).emit("return-message", dataChat)
   });
 });

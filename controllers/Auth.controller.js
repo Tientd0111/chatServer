@@ -49,6 +49,7 @@ exports.login = async (req, res) => {
 			process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
 
 		const dataForAccessToken = {
+			_id: user._id,
 			username: user.username,
 		};
 		const accessToken = await authMethod.generateToken(
@@ -195,6 +196,7 @@ exports.refreshToken = async (req, res) => {
 
 	// Tạo access token mới
 	const dataForAccessToken = {
+		_id,
 		username,
 	};
 
