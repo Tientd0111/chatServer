@@ -23,7 +23,6 @@ function authorize(roles = []) {
 				accessTokenFromHeader,
 				accessTokenSecret,
 			);
-			console.log("xxx",verified);
 			if(!verified) {
 				return res
 					.status(401)

@@ -10,3 +10,16 @@ exports.upload = async (req,res) =>{
 		console.log(e)
 	}
 }
+exports.upload_array = async (req,res) =>{
+	const url = req.protocol + '://' + req.get('host')
+	try {
+		if(!!req){
+			const list = await Promise.all(req.files.map((x)=>{
+				return x.filename
+			}))
+			res.send({files: list})
+		}
+	}catch (e) {
+		console.log(e)
+	}
+}

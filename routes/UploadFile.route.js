@@ -34,4 +34,5 @@ const upload = multer({
 });
 
 router.post('/upload', upload.single('image'),UploadFileController.upload);
+router.post('/upload-array', upload.array('files'),UploadFileController.upload_array);
 module.exports = router;

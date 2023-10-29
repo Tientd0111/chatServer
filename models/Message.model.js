@@ -14,6 +14,7 @@ let ConversationSchema = new mongoose.Schema({
         ref: 'User'
     },
     content: {type: String},
+    message_image:{type: Array},
 	created_at: { type: Date, default: new Date()},
 	updated_at: { type: Date},
 });

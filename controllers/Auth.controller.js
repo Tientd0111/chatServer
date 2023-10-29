@@ -6,6 +6,7 @@ const authMethod = require('../services/auth.service');
 const jwtVariable = require('../constant/jwt');
 const {SALT_ROUND} = require('../constant/auth');
 const roles = require('../constant/role');
+const { resUser } = require('../utils/resultObj');
 
 exports.register = async (req, res) => {
 	const data = req.body
@@ -209,4 +210,35 @@ exports.refreshToken = async (req, res) => {
 		return reqHelper(req, res, {status: 400, msg: 'create_token_not_success'})
 	}
 	return reqHelper(req, res, {msg: 'ok', accessToken})
+};
+exports.myInfo = async (req, res) => {
+	// Lấy access token từ header
+	const accessTokenFromHeader = req.header('Authorization')?.replace('Bearer ', '');
+	if (!accessTokenFromHeader) {
+		return reqHelper(req, res, {status: 400, msg: 'token_not_found'})
+	}
+
+	const accessTokenSecret =
+		process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
+	const accessTokenLife =
+		process.env.ACCESS_TOKEN_LIFE || jwtVariable.accessTokenLife;
+
+	// Decode access token đó
+	const decoded = await authMethod.decodeToken(
+		accessTokenFromHeader,
+		accessTokenSecret,
+	);
+	if (!decoded) {
+		return reqHelper(req, res, {status: 400, msg: 'token_not_valid'})
+	}
+
+	const _id = decoded.payload._id; // Lấy id từ payload
+
+	const user = await User.findById({_id: _id});
+	if (!user) {
+		return reqHelper(req, res, {status: 400, msg: 'user_notfound'})
+	}
+
+	return res.send({user: resUser(user)})
+
 };
