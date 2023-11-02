@@ -8,7 +8,7 @@ exports.createStory = async (req, res) => {
 				user: data.user,
                 file: data.file
 			});
-			await conversation.save()
+			await story.save()
 			res.send({success: true, msg: 'thành công'})
 		} catch (err) {
 			res.send({status: 409, msg: 'invalid_data'})

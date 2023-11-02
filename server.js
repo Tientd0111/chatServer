@@ -117,7 +117,10 @@ io.on("connection",async (socket) => {
   socket.on('typing', (conversation_id) => {
     return socket.broadcast.to(conversation_id).emit("return-typing",conversation_id)
   });
-
+  socket.on("call-video", async (data) => {
+    socket.join(data.arrive)
+    return socket.broadcast.to(data.arrive).emit("incoming-call", {from: data.call_from,offer: data.offer})
+  })
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
     const dataChat = {
