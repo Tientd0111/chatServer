@@ -119,7 +119,11 @@ io.on("connection",async (socket) => {
   });
   socket.on("call-video", async (data) => {
     socket.join(data.arrive)
-    return socket.broadcast.to(data.arrive).emit("incoming-call", {from: data.call_from,offer: data.offer})
+    return socket.broadcast.to(data.arrive).emit("incoming-call", {from: data.call_from,arrive: data.arrive,offer: data.offer})
+  })
+
+  socket.on("call-accepted", async (data) => {
+    return io.to(decoded.payload._id).emit("call-accepted",{ans:data.ans})
   })
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
