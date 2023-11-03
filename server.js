@@ -123,7 +123,7 @@ io.on("connection",async (socket) => {
   })
 
   socket.on("call-accepted", async (data) => {
-    return io.to(decoded.payload._id).emit("call-accepted",{ans:data.ans})
+    return io.to(decoded.payload._id).emit("accepted",{ans:data.ans})
   })
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
