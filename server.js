@@ -125,6 +125,12 @@ io.on("connection",async (socket) => {
   socket.on("call-accepted", async (data) => {
     return io.to(decoded.payload._id).emit("accepted",{ans:data.ans})
   })
+  socket.on("needed", (data) => {
+    io.to(decoded.payload._id).emit("needed", { from: decoded.payload._id, offer: data.offer });
+  });
+  socket.on("done", (data) => {
+    io.to(decoded.payload._id).emit("final", { from: decoded.payload._id, ans: data.ans });
+  });
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
     const dataChat = {
