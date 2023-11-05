@@ -52,6 +52,6 @@
     "utf-8-validate": "^5.0.9"
   },
   "engines": {
-    "node": "v16.14.2"
+    "node": "v16.20.1"
   }
 }
