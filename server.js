@@ -122,14 +122,15 @@ io.on("connection",async (socket) => {
   })
 
   socket.on("call-accepted", async (data) => {
-    console.log(data);
-    return io.to(data.conversation_id).emit("accepted",{ans:data.ans})
+    
+    return socket.broadcast.to(data.conversation_id).emit("accepted",{ans:data.ans})
   })
   socket.on("needed", (data) => {
-    io.to(data.conversation_id).emit("needed", { from: data.call_from, offer: data.offer });
+    console.log(data);
+    return socket.broadcast.to(data.conversation_id).emit("return-needed", { from: data.call_from, offer: data.offer });
   });
   socket.on("done", (data) => {
-    io.to(data.conversation_id).emit("final", { from: data.call_from, ans: data.offer });
+    return socket.broadcast.to(data.conversation_id).emit("final", { from: data.call_from, ans: data.offer });
   });
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
