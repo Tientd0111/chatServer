@@ -118,18 +118,18 @@ io.on("connection",async (socket) => {
     return socket.broadcast.to(conversation_id).emit("return-typing",conversation_id)
   });
   socket.on("call-video", async (data) => {
-    socket.join(data.arrive)
-    return socket.broadcast.to(data.arrive).emit("incoming-call", {from: data.call_from,arrive: data.arrive,offer: data.offer})
+    return socket.broadcast.to(data.conversation_id).emit("incoming-call", {from: data.call_from,arrive: data.arrive,offer: data.offer})
   })
 
   socket.on("call-accepted", async (data) => {
-    return io.to(decoded.payload._id).emit("accepted",{ans:data.ans})
+    console.log(data);
+    return io.to(data.conversation_id).emit("accepted",{ans:data.ans})
   })
   socket.on("needed", (data) => {
-    io.to(decoded.payload._id).emit("needed", { from: decoded.payload._id, offer: data.offer });
+    io.to(data.conversation_id).emit("needed", { from: data.call_from, offer: data.offer });
   });
   socket.on("done", (data) => {
-    io.to(decoded.payload._id).emit("final", { from: decoded.payload._id, ans: data.ans });
+    io.to(data.conversation_id).emit("final", { from: data.call_from, ans: data.offer });
   });
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
