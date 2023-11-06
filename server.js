@@ -117,21 +117,6 @@ io.on("connection",async (socket) => {
   socket.on('typing', (conversation_id) => {
     return socket.broadcast.to(conversation_id).emit("return-typing",conversation_id)
   });
-  socket.on("call-video", async (data) => {
-    return socket.broadcast.to(data.conversation_id).emit("incoming-call", {from: data.call_from,arrive: data.arrive,offer: data.offer})
-  })
-
-  socket.on("call-accepted", async (data) => {
-    
-    return socket.broadcast.to(data.conversation_id).emit("accepted",{ans:data.ans})
-  })
-  socket.on("needed", (data) => {
-    console.log(data);
-    return socket.broadcast.to(data.conversation_id).emit("return-needed", { from: data.call_from, offer: data.offer });
-  });
-  socket.on("done", (data) => {
-    return socket.broadcast.to(data.conversation_id).emit("final", { from: data.call_from, ans: data.offer });
-  });
   socket.on("send-message", async (msg) => {
     await messageController.createMessage(msg)
     const dataChat = {
@@ -148,5 +133,32 @@ io.on("connection",async (socket) => {
     const res = await addFriend(data)
     socket.broadcast.to(data.arrive).emit("return-add-friend",res)
     socket.leave(data.arrive)
+  })
+
+
+  // call video
+  socket.on("call-video", async (data) => {
+    return socket.broadcast.to(data.conversation_id).emit("incoming-call", {from: data.call_from,arrive: data.arrive,offer: data.offer})
+  })
+
+  socket.on("call-accepted", async (data) => {
+    
+    return socket.broadcast.to(data.conversation_id).emit("accepted",{ans:data.ans})
+  })
+  socket.on("needed", (data) => {
+    console.log(data);
+    return socket.broadcast.to(data.conversation_id).emit("return-needed", { from: data.call_from, offer: data.offer });
+  });
+  socket.on("done", (data) => {
+    return socket.broadcast.to(data.conversation_id).emit("final", { from: data.call_from, ans: data.offer });
+  });
+  socket.on("end-call",(data) => {
+    console.log(data);
+    return io.to(data.conversation_id).emit("end",{from: data.from})
+  })
+
+  socket.on("change-video",(data)=>{
+    console.log("mmm",data);
+    return socket.broadcast.to(data.conversation_id).emit("status-video", {status: data.status})
   })
 });
