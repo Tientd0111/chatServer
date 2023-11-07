@@ -17,6 +17,7 @@ let ConversationSchema = new mongoose.Schema({
 	updated_at: { type: Date},
 });
 
+ConversationSchema.index({user_1: 1, user_2: 1});
 ConversationSchema.plugin(AutoIncrement.plugin, {modelName: 'Conversation', field:'UID'});
 // Export the model
 module.exports = mongoose.model('Conversation', ConversationSchema);

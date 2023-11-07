@@ -24,7 +24,7 @@ let UserSchema = new mongoose.Schema({
 	last_logout: {type: Date},
 	devices: [String],
 });
-
+UserSchema.index({email: 1});
 UserSchema.plugin(AutoIncrement.plugin, {modelName: 'User', field:'UID'});
 // Export the model
 module.exports = mongoose.model('User', UserSchema);

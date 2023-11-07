@@ -22,7 +22,7 @@ let NotificationSchema = new mongoose.Schema({
   created_at: { type: Date, default: new Date() },
   updated_at: { type: Date },
 });
-
+NotificationSchema.index({from: 1});
 NotificationSchema.plugin(AutoIncrement.plugin, { modelName: 'Notification', field: 'UID' });
 // Export the model
 module.exports = mongoose.model('Notification', NotificationSchema);
