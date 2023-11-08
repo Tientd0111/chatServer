@@ -48,22 +48,17 @@ exports.getMessageByConversation = async (req, res) => {
     const data = req.params
     if(!!data){
         try{
-            const message = await MessageModel.find({conversation_id: data.id}).populate('sender', 'name avatar').lean()
-            const listMessage = message.map((x) => {
-                return {
-                    _id: x._id,
-                    conversation_id: data.id,
-                    sender: x.sender,
-                    content: x.content,
-                    message_image: x.message_image
-                }
-            })
-            return res.send({message: listMessage})
+            const message = await MessageModel.find({ conversation_id: data.id })
+                .populate('sender', 'name avatar')
+                .select('_id conversation_id sender content message_image')
+                .lean();
+            return res.send({message})
         }catch (e){
             console.log(e);
         }
     }
 }
+
 
 
 // exports.getListImageByConversation = async (req,res) => {

@@ -18,7 +18,7 @@ let Messagechema = new mongoose.Schema({
 	created_at: { type: Date, default: new Date()},
 	updated_at: { type: Date},
 });
-Messagechema.index({conversation_id: 1, sender: 1});
+Messagechema.index({conversation_id: 1});
 Messagechema.plugin(AutoIncrement.plugin, {modelName: 'Message', field:'UID'});
 // Export the model
 module.exports = mongoose.model('Message', Messagechema);
