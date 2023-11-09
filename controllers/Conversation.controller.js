@@ -89,14 +89,14 @@ exports.getMyConversation = async (req, res) => {
 //         }
 //     }
 // }
-exports.getConversationById = async (req, res) => {
-    const data = req.params
-    if(!!data){
-        try{
-            const conversation = await Conversation.findOne({_id: data.id}).populate('user_1', 'name avatar').populate('user_2', 'name avatar')
-            return res.send({conversation: resConversation(conversation)})
-        }catch (e){
-            console.log(e);
+    exports.getConversationById = async (req, res) => {
+        const data = req.params
+        if(!!data){
+            try{
+                const conversation = await Conversation.findById({_id: data.id}).populate('user_1', 'name avatar').populate('user_2', 'name avatar').lean()
+                return res.send({conversation: resConversation(conversation)})
+            }catch (e){
+                console.log(e);
+            }
         }
     }
-}
