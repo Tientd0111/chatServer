@@ -4,6 +4,7 @@ const conversation = require("./routes/Conversation.route");
 const message = require("./routes/Message.route");
 const notification = require("./routes/Notification.route");
 const friend = require("./routes/Friendship.route");
+const story = require("./routes/Story.route");
 const upload = require("./routes/UploadFile.route");
 const port = process.env.PORT || 8080;
 // Setting & Connect to the Database
@@ -66,6 +67,7 @@ app.use("/api/v1/conversation", conversation);
 app.use("/api/v1/message", message);
 app.use("/api/v1/notification", notification);
 app.use("/api/v1/friend", friend);
+app.use("/api/v1/story", story);
 
 httpServer.listen(port, () => {
   console.log("Http sv listen in ", port);

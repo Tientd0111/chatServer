@@ -1,9 +1,5 @@
-const Conversation = require("../models/Conversation.model");
-const FriendshipModel = require("../models/Friendship.model");
-const MessageModel = require("../models/Message.model");
 const NotificationModel = require("../models/Notification.model");
-const UserModel = require("../models/User.model");
-const { resConversation, resUser } = require("../utils/resultObj");
+const { resUser } = require("../utils/resultObj");
 const authMethod = require('../services/auth.service');
 const jwtVariable = require('../constant/jwt');
 
@@ -12,11 +8,8 @@ exports.getMyNotification = async (req, res) => {
   if (!accessTokenFromHeader) {
     return reqHelper(req, res, {status: 400, msg: 'token_not_found'})
   }
-
   const accessTokenSecret =
     process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
-  const accessTokenLife =
-    process.env.ACCESS_TOKEN_LIFE || jwtVariable.accessTokenLife;
 
   const decoded = await authMethod.decodeToken(
     accessTokenFromHeader,

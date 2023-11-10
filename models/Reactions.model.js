@@ -2,23 +2,23 @@ const mongoose = require('mongoose');
 require('mongoose-long')(mongoose);
 const AutoIncrement = require('mongoose-auto-increment-reworked').MongooseAutoIncrementID;
 
-let FriendshipSchema = new mongoose.Schema({
-    sent_from: {
+let ReactionSchema = new mongoose.Schema({
+    user: {
         type: mongoose.Schema.Types.ObjectId,
         required: true,
         ref: 'User'
     },
-    arrive: {
+    message:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: 'User'
+        ref: 'Message'
     },
-
-    status: {type: Number, default: 0}, // 0: chờ xác nhận, 1: đã xác nhận, 2: hủy 
+    reaction: {type: Number}, // 0: like, 1: love, 2: angry, 3: sad,
 	created_at: { type: Date, default: new Date()},
 	updated_at: { type: Date},
 });
 
-FriendshipSchema.plugin(AutoIncrement.plugin, {modelName: 'Friendship', field:'UID'});
+ReactionSchema.index({user: 1, message: 1});
+ReactionSchema.plugin(AutoIncrement.plugin, {modelName: 'Reaction', field:'UID'});
 // Export the model
-module.exports = mongoose.model('Friendship', FriendshipSchema);
+module.exports = mongoose.model('Reaction', ReactionSchema);

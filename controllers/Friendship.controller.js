@@ -42,12 +42,8 @@ exports.getMyFriend = async (req, res) => {
 	if (!accessTokenFromHeader) {
 		return reqHelper(req, res, { status: 400, msg: 'token_not_found' })
 	}
-
 	const accessTokenSecret =
 		process.env.ACCESS_TOKEN_SECRET || jwtVariable.accessTokenSecret;
-	const accessTokenLife =
-		process.env.ACCESS_TOKEN_LIFE || jwtVariable.accessTokenLife;
-
 	// Decode access token đó
 	const decoded = await authMethod.decodeToken(
 		accessTokenFromHeader,
@@ -126,3 +122,5 @@ exports.getFriendById = async (req, res) => {
 		}
 	}	
 }
+
+// 

@@ -13,7 +13,7 @@ let StorySchema = new mongoose.Schema({
 	created_at: { type: Date, default: new Date()},
 	updated_at: { type: Date},
 });
-
+StorySchema.index({user:1});
 StorySchema.plugin(AutoIncrement.plugin, {modelName: 'Story', field:'UID'});
 // Export the model
 module.exports = mongoose.model('Story', StorySchema);
