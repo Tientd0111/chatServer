@@ -6,5 +6,6 @@ const cache = require('../routeCache');
 const authorize = require('../middlewares/auth.middlewares');
 
 router.get('/get-story-by-id/:id',authorize(), storyController.getStoryById);
+router.get('/get-all-story', storyController.getStroryNew);
 router.post('/create-story',authorize(), storyController.createStory);
 module.exports = router;
