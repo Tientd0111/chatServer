@@ -31,7 +31,7 @@ const io = new Server(httpServer,{
     origin: "*"
   }
 });
-
+mongoose.set('strictQuery', false);
 mongoose
   .connect(configDB.url, configDB.config)
   .then(async () => {
