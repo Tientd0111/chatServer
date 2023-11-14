@@ -288,6 +288,7 @@ exports.getUser = async (req, res) => {
     }
     query._id = { $ne: _id };
     const user = await User.find(query).select("_id name email phone_number avatar cover nickname").lean();
+    
     return res.send({ user: user });
   } catch (error) {
     return reqHelper(req, res, { status: 400, msg: "token_not_valid" });

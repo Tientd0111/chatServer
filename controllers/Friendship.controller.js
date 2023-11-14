@@ -38,6 +38,7 @@ exports.addFriend = async (data) => {
 };
 
 exports.getMyFriend = async (req, res) => {
+	const { name } = req.query;
 	const accessTokenFromHeader = req.header('Authorization')?.replace('Bearer ', '');
 	if (!accessTokenFromHeader) {
 		return reqHelper(req, res, { status: 400, msg: 'token_not_found' })
@@ -53,9 +54,10 @@ exports.getMyFriend = async (req, res) => {
 		return reqHelper(req, res, { status: 400, msg: 'token_not_valid' })
 	}
 	const _id = decoded.payload._id;
+
 	try {
-		const sent_from = await FriendshipModel.find({ sent_from: _id, status: 1 }).populate('sent_from', 'name avatar').populate('arrive', 'name avatar')
-		const arrive = await FriendshipModel.find({ arrive: _id, status: 1 }).populate('sent_from', 'name avatar').populate('arrive', 'name avatar')
+		const sent_from = await FriendshipModel.find({ sent_from: _id, status: 1 }).populate('sent_from', 'name avatar nickname').populate('arrive', 'name avatar nickname')
+		const arrive = await FriendshipModel.find({ arrive: _id, status: 1 }).populate('sent_from', 'name avatar nickname').populate('arrive', 'name avatar nickname')
 		const list = sent_from.concat(arrive)
 		const listFriend = await Promise.all(list.map(async (x) => {
 			return {
@@ -64,11 +66,20 @@ exports.getMyFriend = async (req, res) => {
 				status: x.status
 			}
 		}))
-		return res.send({ friend: listFriend })
+		if (name) {
+			// Nếu có tham số truy vấn, tìm kiếm bạn bè theo tên
+			const friend = listFriend.filter(friend => friend.user.name.toLowerCase().includes(name.toLowerCase()));
+			return res.send({ friend : friend})
+		} else {
+			// Nếu không có tham số truy vấn, trả về danh sách tất cả các bạn bè
+			return res.send({ friend: listFriend });
+		}
+		// return res.send({ friend: listFriend })
 	} catch (e) {
 		console.log(e);
 	}
 }
+
 
 
 exports.getFriendById = async (req, res) => {

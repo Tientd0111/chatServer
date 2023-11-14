@@ -4,6 +4,6 @@ const cache = require('../routeCache')
 const friendshipController = require('../controllers/Friendship.controller');
 const authorize = require('../middlewares/auth.middlewares');
 
-router.get('/getMyFriend',authorize(),cache(300), friendshipController.getMyFriend);
-router.get('/:id',authorize(),cache(300), friendshipController.getFriendById);
+router.get('/getMyFriend',authorize(), friendshipController.getMyFriend);
+router.get('/:id',authorize(), friendshipController.getFriendById);
 module.exports = router;
