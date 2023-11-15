@@ -7,6 +7,18 @@ const jwtVariable = require("../constant/jwt");
 const { SALT_ROUND } = require("../constant/auth");
 const roles = require("../constant/role");
 const { resUser } = require("../utils/resultObj");
+const http = require('http');
+
+async function getNetworkIP() {
+	return new Promise((resolve, reject) => {
+		http.get({'host': 'api.ipify.org', 'port': 80, 'path': '/'}, function(resp) {
+			resp.on('data', function(ip) {
+				resolve(ip)
+			});
+		});
+	})
+
+}
 
 exports.register = async (req, res) => {
   const data = req.body;
@@ -42,6 +54,7 @@ exports.register = async (req, res) => {
 };
 const unique = (arr) => [...new Set(arr)];
 exports.login = async (req, res) => {
+  const ipcl = req.body.ip
   const data = req.body;
   if (!!data && !!data.username && !!data.password) {
     const user = await User.findOne({ username: data.username });
@@ -75,6 +88,13 @@ exports.login = async (req, res) => {
     } else {
       refreshToken = user.refresh_token;
     }
+
+    const ip = await getNetworkIP();
+    // if(ip != '13.229.66.199') user.ips.push(ip)
+    // if(!!ipcl) user.ips.push(ipcl)
+    // user.ips = unique(user.ips)
+    console.log("ip",ipcl);
+
     user.last_login = new Date();
     await user.save();
     return res.send({
