@@ -108,8 +108,6 @@ io.on("connection",async (socket) => {
     }else{
       previousData = data
     }
-
-    console.log(previousData.latitude !== data.latitude && previousData.longitude !== data.longitude);
   })
 
   
