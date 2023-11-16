@@ -94,6 +94,23 @@ io.on("connection",async (socket) => {
     // //user online status
     // return socket.broadcast.emit('getOnlineUser',listUser)
   }
+  let positionTimeout = null
+  let previousData = null
+  socket.on("push_location",(data) =>{
+    if(previousData !== null){
+      if (previousData.latitude !== data.latitude && previousData.longitude !== data.longitude) {
+        clearTimeout(positionTimeout)
+        positionTimeout = setTimeout(() => {
+          authController.updateLocation(data)
+        }, 3000)
+        previousData = data
+      }
+    }else{
+      previousData = data
+    }
+
+    console.log(previousData.latitude !== data.latitude && previousData.longitude !== data.longitude);
+  })
 
   
 

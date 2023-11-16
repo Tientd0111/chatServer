@@ -314,3 +314,8 @@ exports.getUser = async (req, res) => {
     return reqHelper(req, res, { status: 400, msg: "token_not_valid" });
   }
 };
+
+
+exports.updateLocation = async (data) => {
+  console.log(data);
+};
