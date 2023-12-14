@@ -8,13 +8,13 @@ const sendMail = async (email, subject, text) => {
 			service: 'gmail',
 			// secure: false,
 			auth: {
-				user: "winclub24h@gmail.com",
+				user: "",
 				pass: "sscgshemcoteipzd",
 			},
 		});
 
 		await transporter.sendMail({
-			from: "winclubsupport",
+			from: "",
 			to: email,
 			subject: subject,
 			text: text,
